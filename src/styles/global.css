@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+/* ===== Token desain (Tailwind CSS 4) — Palet brittanychiang.com (slate/teal) ===== */@theme {
+  --color-bg: #0f172a; /* Background (slate-900) */
+  --color-bg-light: #1e293b; /* Surface (slate-800) */
+  --color-bg-lighter: #334155; /* Surface lebih terang (slate-700) */
+  --color-line: #1e293b; /* Border (slate-800) */
+  --color-slate: #e2e8f0; /* Primary Text (slate-200) */
+  --color-slate-dim: #94a3b8; /* Secondary Text (slate-400) */
+  --color-accent: #5eead4; /* Accent (teal-300) */
+  --color-accent-dark: #2dd4bf; /* Accent hover (teal-400) */
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  --shadow-card: 0 10px 30px -15px rgba(2, 12, 27, 0.7);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  overflow-x: hidden;
+}
+
+/* Menu navigasi: garis indikator + label (lihat Sidebar.astro) */
+.nav-line {
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+.nav-label {
+  transition: color 0.3s ease;
+}
+/* State aktif (section sedang dilihat) */
+.nav-active .nav-line {
+  width: 4rem;
+  background-color: var(--color-accent);
+}
+.nav-active .nav-label {
+  color: var(--color-slate);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-bg-lighter);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #134e4a; /* teal-900 */
+}

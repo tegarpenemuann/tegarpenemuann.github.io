@@ -1,0 +1,18 @@
+---
+interface Props {
+  number: string;
+  title: string;
+}
+
+const { number, title } = Astro.props;
+---
+
+<!-- Header section: terlihat sebagai sticky label di mobile, disembunyikan di desktop (label sudah ada di sidebar) -->
+<div
+  class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-bg/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:relative lg:mx-0 lg:w-auto lg:bg-transparent lg:p-0 lg:sr-only"
+>
+  <h2 class="text-sm font-bold uppercase tracking-widest text-slate">
+    <span class="mr-2 text-accent">{number}.</span>
+    {title}
+  </h2>
+</div>

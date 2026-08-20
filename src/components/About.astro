@@ -1,0 +1,23 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import { profile } from '../data/site';
+import { useTranslations, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const t = useTranslations(locale);
+---
+
+<section id="about" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+  <SectionHeading number="01" title={t('section.about')} />
+
+  <div class="max-w-lg">
+    {
+      profile.bio[locale].map((paragraph) => (
+        <p class="mb-4">{paragraph}</p>
+      ))
+    }
+    <p class="mb-4">
+      {t('about.skills')} {profile.skills.join(', ')}.
+    </p>
+  </div>
+</section>

@@ -1,0 +1,79 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { experience } from '../data/site';
+import { useTranslations, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const t = useTranslations(locale);
+---
+
+<section id="experience" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+  <SectionHeading number="02" title={t('section.experience')} />
+
+  <ol class="group/list">
+    {
+      experience.map((job) => (
+        <li class="mb-12">
+          <div
+            class="group relative grid pb-1 transition-opacity sm:grid-cols-8 sm:gap-8 md:gap-4 group-hover/list:opacity-50 hover:!opacity-100"
+          >
+            <!-- Overlay hover -->
+            <div
+              class="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md lg:-inset-x-6 lg:block lg:group-hover:bg-bg-light/60 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"
+              aria-hidden="true"
+            ></div>
+
+            <!-- Periode -->
+            <header
+              class="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-dim sm:col-span-2"
+            >
+              {job.period[locale]}
+            </header>
+
+            <!-- Detail -->
+            <div class="z-10 sm:col-span-6">
+              <h3 class="text-base">
+                {
+                  job.companyUrl ? (
+                    <a
+                      href={job.companyUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-baseline font-medium leading-tight text-slate transition-colors hover:text-accent"
+                    >
+                      {job.role[locale]}
+                      <Icon
+                        name="arrow"
+                        class="ml-1 h-4 w-4 shrink-0 translate-y-px transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+                      />
+                    </a>
+                  ) : (
+                    <span class="font-medium leading-tight text-slate">
+                      {job.role[locale]}
+                    </span>
+                  )
+                }
+              </h3>
+              <div class="text-slate-dim">{job.company}</div>
+              <p class="mt-2 text-sm leading-normal">{job.description[locale]}</p>
+              <ul class="mt-2 flex flex-wrap">
+                {
+                  job.tech.map((tech) => (
+                    <li class="mr-1.5 mt-2">
+                      <span
+                        class="flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-medium leading-5 text-accent"
+                      >
+                        {tech}
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>

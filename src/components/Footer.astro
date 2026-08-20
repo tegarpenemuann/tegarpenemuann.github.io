@@ -1,0 +1,15 @@
+---
+import { profile } from '../data/site';
+import { useTranslations, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const t = useTranslations(locale);
+---
+
+<footer class="max-w-md pb-16 text-sm text-slate-dim sm:pb-0">
+  <p>
+    {t('footer.credit')}{' '}
+    <span class="font-medium text-slate">{profile.name}</span> — ©
+    {new Date().getFullYear()}.
+  </p>
+</footer>

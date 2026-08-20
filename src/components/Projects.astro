@@ -1,0 +1,128 @@
+---
+import Icon from './Icon.astro';
+import SectionHeading from './SectionHeading.astro';
+import { projects, socials } from '../data/site';
+import { useTranslations, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const t = useTranslations(locale);
+
+const linkedin = socials.find((s) => s.name === 'LinkedIn');
+---
+
+<section id="projects" class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24">
+  <SectionHeading number="03" title={t('section.projects')} />
+
+  <ul class="group/list">
+    {
+      projects.map((project, index) => (
+        <li class="mb-12">
+          <div
+            class="group relative grid grid-cols-8 gap-4 transition-opacity sm:items-center sm:gap-8 group-hover/list:opacity-50 hover:!opacity-100"
+          >
+            <!-- Overlay hover -->
+            <div
+              class="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md lg:-inset-x-6 lg:block lg:group-hover:bg-bg-light/60 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg"
+              aria-hidden="true"
+            ></div>
+
+            <!-- Gambar -->
+            <div
+              class="z-10 col-span-2 aspect-video overflow-hidden rounded border-2 border-slate-dim/20 sm:col-span-2 sm:translate-y-1"
+            >
+              {
+                project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title[locale]}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div
+                    class="flex h-full w-full items-center justify-center bg-bg-lighter"
+                    aria-hidden="true"
+                  >
+                    <span class="font-mono text-xl font-bold text-accent/40">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                  </div>
+                )
+              }
+            </div>
+
+            <!-- Konten -->
+            <div class="z-10 col-span-6 sm:col-span-6">
+              <h3 class="text-base">
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-baseline font-medium leading-tight text-slate transition-colors hover:text-accent"
+                >
+                  {project.title[locale]}
+                  <Icon
+                    name="arrow"
+                    class="ml-1 h-4 w-4 shrink-0 translate-y-px transition-transform group-hover:-translate-y-1 group-hover:translate-x-1"
+                  />
+                </a>
+              </h3>
+              <p class="mt-2 text-sm leading-normal">{project.description[locale]}</p>
+              <ul class="mt-2 flex flex-wrap">
+                {
+                  project.tech.map((tech) => (
+                    <li class="mr-1.5 mt-2">
+                      <span
+                        class="flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-medium leading-5 text-accent"
+                      >
+                        {tech}
+                      </span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <div class="mt-3 flex items-center gap-4 font-mono text-xs text-slate-dim">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center transition-colors hover:text-accent"
+                >
+                  {t('projects.source')}
+                </a>
+                <a
+                  href={project.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center transition-colors hover:text-accent"
+                >
+                  {t('projects.demo')}
+                  <Icon name="external" class="ml-1 h-3.5 w-3.5" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    linkedin && (
+      <div class="mt-12">
+        <a
+          href={linkedin.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center font-semibold text-slate transition-colors hover:text-accent"
+        >
+          {t('projects.cta')}
+          <Icon
+            name="arrow"
+            class="ml-1 h-4 w-4 transition-transform group-hover:translate-x-2"
+          />
+        </a>
+      </div>
+    )
+  }
+</section>

@@ -1,0 +1,138 @@
+---
+import Icon from './Icon.astro';
+import { profile, socials } from '../data/site';
+import { useTranslations, type Locale } from '../i18n';
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const t = useTranslations(locale);
+
+const links = [
+  { name: t('nav.about'), href: '#about' },
+  { name: t('nav.experience'), href: '#experience' },
+  { name: t('nav.projects'), href: '#projects' },
+];
+
+const base = import.meta.env.BASE_URL;
+const other = locale === 'id' ? 'en' : 'id';
+const otherHref = `${base}${other === 'en' ? 'en/' : ''}`;
+---
+
+<!-- Kolom kiri: nama, jabatan, tagline, menu, bahasa, sosial (desktop saja) -->
+<div class="flex flex-col justify-between lg:sticky lg:top-0 lg:max-h-screen lg:w-[48%] lg:py-24">
+  <div>
+    <img
+      src={`${import.meta.env.BASE_URL}images/logo.jpg`}
+      alt="Logo"
+      class="mb-5 h-12 w-12 rounded-full border border-slate-dim/20 object-cover"
+      loading="lazy"
+    />
+    <h1 class="text-4xl font-extrabold tracking-tight text-slate sm:text-5xl">
+      <a href="#top">{profile.name}</a>
+    </h1>
+    <h2 class="mt-3 text-lg font-medium tracking-tight text-slate sm:text-xl">
+      {profile.role[locale]}
+    </h2>
+    <p class="mt-4 max-w-xs leading-normal text-slate-dim">{profile.tagline[locale]}</p>
+
+    <nav class="hidden lg:block" aria-label="Navigasi utama">
+      <ul class="mt-16 w-max">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="group flex items-center py-3"
+                data-nav-link
+              >
+                <span
+                  class="nav-line mr-4 h-px w-8 bg-slate-dim/60 group-hover:w-16 group-hover:bg-accent"
+                  aria-hidden="true"
+                ></span>
+                <span class="nav-label text-xs font-bold uppercase tracking-widest text-slate-dim group-hover:text-slate">
+                  {link.name}
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+
+  <div class="hidden lg:block">
+    <!-- Pengalih bahasa -->
+    <div class="flex items-center gap-3 font-mono text-xs" aria-label={t('lang.label')}>
+      <a
+        href={base}
+        class={locale === 'id' ? 'font-semibold text-accent' : 'text-slate-dim transition-colors hover:text-slate'}
+      >
+        ID
+      </a>
+      <span class="text-slate-dim/50" aria-hidden="true">/</span>
+      <a
+        href={`${base}en/`}
+        class={locale === 'en' ? 'font-semibold text-accent' : 'text-slate-dim transition-colors hover:text-slate'}
+      >
+        EN
+      </a>
+    </div>
+
+    <ul class="ml-1 mt-8 flex items-center">
+      {
+        socials.map((social) => (
+          <li class="mr-5 shrink-0">
+            <a
+              href={social.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-slate-dim hover:text-accent transition-colors"
+              aria-label={social.name}
+            >
+              <Icon name={social.icon} class="h-6 w-6" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  // Scrollspy: menyorot menu nav sesuai section yang sedang aktif di layar
+  const navLinks = document.querySelectorAll('[data-nav-link]');
+  const ids = [...navLinks]
+    .map((link) => link.getAttribute('href'))
+    .filter((href) => href && href.startsWith('#'))
+    .map((href) => href.slice(1));
+
+  const setActive = (id) => {
+    navLinks.forEach((link) => {
+      link.classList.toggle('nav-active', link.getAttribute('href') === `#${id}`);
+    });
+  };
+
+  const clearActive = () =>
+    navLinks.forEach((link) => link.classList.remove('nav-active'));
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    },
+    { rootMargin: '-45% 0px -55% 0px' }
+  );
+
+  ids.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (window.scrollY < 200) clearActive();
+    },
+    { passive: true }
+  );
+</script>

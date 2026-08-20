@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+import Footer from '../components/Footer.astro';
+import { siteMeta } from '../data/site';
+import favicon from '../assets/favicon.svg';
+import type { Locale } from '../i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const locale = (Astro.currentLocale ?? 'id') as Locale;
+const meta = siteMeta[locale];
+const pageTitle = title ?? meta.title;
+const pageDescription = description ?? meta.description;
+---
+
+<!doctype html>
+<html lang={locale === 'en' ? 'en' : 'id'} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={pageDescription} />
+    <meta name="author" content={siteMeta.author} />
+    <meta name="generator" content={Astro.generator} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href={favicon} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>{pageTitle}</title>
+  </head>
+  <body class="bg-bg leading-relaxed text-slate-dim antialiased selection:bg-accent selection:text-bg">
+    <div class="mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-16 lg:py-0">
+      <div class="lg:flex lg:justify-between lg:gap-4">
+        <Sidebar />
+        <main id="content" class="pt-24 lg:w-[52%] lg:py-24">
+          <slot />
+          <Footer />
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
