@@ -10,6 +10,9 @@ export default defineConfig({
   // - Jika repo bernama "<username>.github.io" gunakan base: '/'
   // - Jika repo lain (misal "portofolio"), URL jadi https://username.github.io/portofolio/
   base: '/',
+  build: {
+    inlineStylesheets: 'auto',
+  },
   vite: {
     plugins: [tailwindcss()],
   },
